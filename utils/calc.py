@@ -57,9 +57,9 @@ def pGetInternalSimilarity(fps, sim_cutoff=0.8):
                 count += 1
     return count
 
-def _pCompareDatabase(dbase, sim_cutoff=0.8):
-    def _pcompare(mol):
+def _pCompareDatabase(ins, sim_cutoff=0.99):
         count = 0
+        mol,dbase =ins
         s = DataStructs.BulkTanimotoSimilarity(mol, dbase)  # +1 compare with the next to the last fp
         for m in range(len(s)):
             if s[m] >= sim_cutoff:
@@ -67,12 +67,12 @@ def _pCompareDatabase(dbase, sim_cutoff=0.8):
 
         return count
 
-    return _pcompare
 
 def pCompareToDatabase(dbase, mols, sim_cutoff=0.8, threads=1):
     pool = multiprocessing.Pool(threads)
-    f =_pCompareDatabase(dbase, sim_cutoff)
-    iters = pool.imap(f, mols, chunksize=20)
+
+    ins = map(lambda x : (x,dbase), mols)
+    iters = pool.imap(_pCompareDatabase, ins, chunksize=20)
 
     counts = []
     count_total =0
