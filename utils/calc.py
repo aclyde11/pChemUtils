@@ -4,6 +4,7 @@ from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem import AllChem
 
+from tqdm import tqdm
 
 def noneCheckedSmileToMol(smi):
     try:
@@ -48,7 +49,7 @@ def pGetInternalSimilarity(fps, sim_cutoff=0.8):
     # the list for the dataframe
     count = 0
     # compare all fp pairwise without duplicates
-    for n in range(len(fps) - 1):  # -1 so the last fp will not be used
+    for n in tqdm(range(len(fps) - 1)):  # -1 so the last fp will not be used
         s = DataStructs.BulkTanimotoSimilarity(fps[n], fps[n + 1:])  # +1 compare with the next to the last fp
         # collect the SMILES and values
         for m in range(len(s)):
