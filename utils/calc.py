@@ -6,6 +6,7 @@ from rdkit import DataStructs
 from rdkit import RDLogger
 from rdkit.Chem import AllChem
 from tqdm import tqdm
+from rdkit.Chem.Scaffolds.MurckoScaffold import GetScaffoldForMol
 
 lg = RDLogger.logger()
 lg.setLevel(RDLogger.CRITICAL)
@@ -154,3 +155,20 @@ def compareToDatabase(dbase, mols, sim_cutoff=0.8):
         if count >= 1:
             count_total += 1
     return counts, count_total
+
+def getScaffold(mol):
+    mol = noneCheckedSmileToMol(mol)
+    if mol is None:
+        return None
+    try:
+        return Chem.MolToSmiles(GetScaffoldForMol(mol))
+    except:
+        return None
+
+def pgetScaffsFromSmiles(mols, threads=16):
+    pool = multiprocessing.Pool(threads)
+    iters = pool.map(getScaffold, mols)
+    iters = list(set(filter(lambda x : x is not None, iters)))
+
+    pool.close()
+    return iters

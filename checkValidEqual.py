@@ -23,24 +23,36 @@ def main(dbase, i):
     input_mols = calc.pGetSmiles(input_mols, threads=4)
 
     # get internal consistency
-    cutoff = 0.99
-    print("Getting internal consistency. Cutoff:", cutoff)
+    print("Getting internal consistency.")
     #num_repeats_inside_dbase = calc.dbaseEqualInternal(dbase_fp)
     input_mols, num_repeats_inside_input = calc.dbaseEqualInternal(input_mols)
     #print("num_repeats_inside_dbase", num_repeats_inside_dbase)
     print("num_repeats_inside_input", num_repeats_inside_input)
 
-    cutoff = 0.98
-    print("Cutoff:", cutoff)
     print("Getting sim between input and database")
     counts = calc.dbaseEquality(dbase_fp, input_mols, threads=32)
-    print("Total mols with >=1", counts)
+    print("Total mols with overlap", counts)
+
+    print("Computing Scaffold Sim")
+    dbase_scaffs = getScaffsFromSmiles()
+    input_scaffs = getScaffsFromSmiles()
+
+    dbase_scaffs, _ = calc.dbaseEqualInternal(dbase_scaffs)
+    input_scaffs, num_repeated_scaffs = calc.dbaseEqualInternal(input_scaffs)
+
+
+    scaff_counts = calc.dbaseEquality(dbase_scaffs, input_scaffs, threads=32)
+
+
     print("\n\n---------\n\n")
     print("Total Sampled: ", input_total_mols)
     print("Valid Sampled: ", input_valid_mols, float(input_valid_mols) / input_total_mols)
     print("Valid Unqiue (In Sample)", len(input_mols),
                                        float(len(input_mols)) / input_total_mols)
     print("Valid Unique (W/ Trn", len(input_mols) - counts, float(len(input_mols) - counts) / input_total_mols)
+
+    print("Unqiue Scaffs (In Sample)", len(input_scaffs), float(len(input_scaffs)) / float(len(dbase_scaffs)))
+    print("Unique Scaffs (Inn Training", len(input_scaffs) - counts)
 
 # def main(dbase, i):
 #     # get valid numbers
