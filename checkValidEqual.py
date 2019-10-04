@@ -26,7 +26,7 @@ def main(dbase, i):
     cutoff = 0.99
     print("Getting internal consistency. Cutoff:", cutoff)
     #num_repeats_inside_dbase = calc.dbaseEqualInternal(dbase_fp)
-    num_repeats_inside_input = calc.dbaseEqualInternal(input_mols)
+    input_mols, num_repeats_inside_input = calc.dbaseEqualInternal(input_mols)
     #print("num_repeats_inside_dbase", num_repeats_inside_dbase)
     print("num_repeats_inside_input", num_repeats_inside_input)
 
@@ -38,9 +38,9 @@ def main(dbase, i):
     print("\n\n---------\n\n")
     print("Total Sampled: ", input_total_mols)
     print("Valid Sampled: ", input_valid_mols, float(input_valid_mols) / input_total_mols)
-    print("Valid Unqiue (In Sample)", input_valid_mols - num_repeats_inside_input,
-                                       float(input_valid_mols - num_repeats_inside_input) / input_total_mols)
-    print("Valid Unique (W/ Trn", input_valid_mols - counts, float(input_valid_mols - counts) / input_total_mols)
+    print("Valid Unqiue (In Sample)", len(input_mols),
+                                       float(len(input_mols)) / input_total_mols)
+    print("Valid Unique (W/ Trn", len(input_mols) - counts, float(len(input_mols) - counts) / input_total_mols)
 
 # def main(dbase, i):
 #     # get valid numbers
