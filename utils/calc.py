@@ -56,3 +56,17 @@ def pGetInternalSimilarity(fps, sim_cutoff=0.8):
             if s[m] >= sim_cutoff:
                 count += 1
     return count
+
+def compareToDatabase(dbase, mols, sim_cutoff=0.8):
+    count_total = 0
+    counts = []
+    for mol in tqdm(mols):
+        count = 0
+        s = DataStructs.BulkTanimotoSimilarity(mol, dbase)  # +1 compare with the next to the last fp
+        for m in range(len(s)):
+            if s[m] >= sim_cutoff:
+                count += 1
+        counts.append(count)
+        if count >= 1:
+            count_total += 1
+    return counts, count_total

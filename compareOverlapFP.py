@@ -27,15 +27,18 @@ def main(dbase, i):
     input_mols = calc.pGetFingerprints(input_mols, threads=4)
 
     # get internal consistency
-    print("Getting internal consistency")
     cutoff = 0.99
+    print("Getting internal consistency. Cutoff:", cutoff)
     #num_repeats_inside_dbase = calc.pGetInternalSimilarity(dbase_fp, sim_cutoff=cutoff)
     num_repeats_inside_input = calc.pGetInternalSimilarity(input_mols, sim_cutoff=cutoff)
     #print("num_repeats_inside_dbase", num_repeats_inside_dbase)
     print("num_repeats_inside_input", num_repeats_inside_input)
 
+    cutoff = 0.98
+    print("Cutoff:", cutoff)
     print("Getting sim between input and database")
-
+    counts, count_total = calc.compareToDatabase(dbase_fp, input_mols, sim_cutoff=cutoff)
+    print("Total mols with >=1", count_total)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
