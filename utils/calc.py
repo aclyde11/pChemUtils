@@ -96,7 +96,8 @@ def dbaseEquality(dbase, mols, threads=16):
 
 
 def dbaseEqualInternal(dbase):
-    return len(dbase) - len(set(dbase))
+    x = set(dbase)
+    return list(x), len(x)
 
 
 def pGetInternalSimilarity(fps, sim_cutoff=0.8):
