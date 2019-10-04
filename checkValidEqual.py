@@ -1,9 +1,6 @@
 '''
-This script takes a database input and a new list.
-
-Calculates fingerprints for all compounds, and compares how many in list repeat within list, and how many are already in database.
-
-This program streams in smiles, but has to store database and new list, so memory can be an issue.
+This script takes a database input and a new list. It cannonicalizes all thes miles, counts up validty and computes overlap
+with the training set.
 '''
 
 import argparse
@@ -28,9 +25,9 @@ def main(dbase, i):
     # get internal consistency
     cutoff = 0.99
     print("Getting internal consistency. Cutoff:", cutoff)
-    num_repeats_inside_dbase = calc.dbaseEqualInternal(dbase_fp)
+    #num_repeats_inside_dbase = calc.dbaseEqualInternal(dbase_fp)
     num_repeats_inside_input = calc.dbaseEqualInternal(input_mols)
-    print("num_repeats_inside_dbase", num_repeats_inside_dbase)
+    #print("num_repeats_inside_dbase", num_repeats_inside_dbase)
     print("num_repeats_inside_input", num_repeats_inside_input)
 
     cutoff = 0.98
@@ -38,6 +35,11 @@ def main(dbase, i):
     print("Getting sim between input and database")
     counts = calc.dbaseEquality(dbase_fp, input_mols)
     print("Total mols with >=1", counts)
+    print("\n\n---------\n\n")
+    print("Total Sampled: ", input_total_mols)
+    print("Valid Sampled: ", input_valid_mols, float(input_total_mols) / input_valid_mols)
+    print("Valid Unqiue (In Sample)", input_valid_mols - num_repeats_inside_input, float(input_valid_mols - num_repeats_inside_input) / input_valid_mols)
+    print("Valid Unique (W/ Trn", input_valid_mols - counts, float(num_repeats_inside_input - counts) / input_total_mols)
 
 # def main(dbase, i):
 #     # get valid numbers

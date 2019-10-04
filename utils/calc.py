@@ -1,10 +1,14 @@
 import multiprocessing
 
+import numpy as np
 from rdkit import Chem
 from rdkit import DataStructs
+from rdkit import RDLogger
 from rdkit.Chem import AllChem
-import numpy as np
 from tqdm import tqdm
+
+lg = RDLogger.logger()
+lg.setLevel(RDLogger.CRITICAL)
 
 def noneCheckedSmileToMol(smi):
     try:
@@ -38,8 +42,10 @@ def pSmilesToValidMolsFromFile(fname, threads=1, return_counts=True):
         return iters, original_length, newlen
     return iters
 
+
 def getMorganfingerprint(m):
     return AllChem.GetMorganFingerprint(m, 2)
+
 
 def pGetFingerprints(mollist, threads=1):
     pool = multiprocessing.Pool(threads)
@@ -47,8 +53,10 @@ def pGetFingerprints(mollist, threads=1):
     pool.close()
     return res
 
+
 def getSmiles(m):
     return Chem.MolToSmiles(m)
+
 
 def pGetSmiles(mollist, threads=1):
     pool = multiprocessing.Pool(threads)
@@ -56,6 +64,7 @@ def pGetSmiles(mollist, threads=1):
 
     pool.close()
     return res
+
 
 def check_in(ins):
     count = 0
@@ -66,10 +75,11 @@ def check_in(ins):
 
     return count
 
+
 def dbaseEquality(dbase, mols, threads=16):
     count = 0
     mols = np.array_split(np.array(mols), threads)
-    inputs = map(lambda x : (list(mols[x]),dbase), range(threads))
+    inputs = map(lambda x: (list(mols[x]), dbase), range(threads))
     pool = multiprocessing.Pool(threads)
     res = pool.map(check_in, inputs)
     pool.close()
@@ -79,8 +89,10 @@ def dbaseEquality(dbase, mols, threads=16):
         sum += i
     return sum
 
+
 def dbaseEqualInternal(dbase):
     return len(dbase) - len(set(dbase))
+
 
 def pGetInternalSimilarity(fps, sim_cutoff=0.8):
     # the list for the dataframe
@@ -94,25 +106,26 @@ def pGetInternalSimilarity(fps, sim_cutoff=0.8):
                 count += 1
     return count
 
-def _pCompareDatabase(ins, sim_cutoff=0.99):
-        count = 0
-        mol,dbase =ins
-        s = DataStructs.BulkTanimotoSimilarity(mol, dbase)  # +1 compare with the next to the last fp
-        for m in range(len(s)):
-            if s[m] >= sim_cutoff:
-                count += 1
 
-        return count
+def _pCompareDatabase(ins, sim_cutoff=0.99):
+    count = 0
+    mol, dbase = ins
+    s = DataStructs.BulkTanimotoSimilarity(mol, dbase)  # +1 compare with the next to the last fp
+    for m in range(len(s)):
+        if s[m] >= sim_cutoff:
+            count += 1
+
+    return count
 
 
 def pCompareToDatabase(dbase, mols, sim_cutoff=0.8, threads=1):
     pool = multiprocessing.Pool(threads)
 
-    ins = map(lambda x : (x,dbase), mols)
+    ins = map(lambda x: (x, dbase), mols)
     iters = pool.imap(_pCompareDatabase, ins, chunksize=20)
 
     counts = []
-    count_total =0
+    count_total = 0
     for count in tqdm(iters, total=len(mols)):
         counts.append(count)
         if count >= 2:
@@ -120,6 +133,7 @@ def pCompareToDatabase(dbase, mols, sim_cutoff=0.8, threads=1):
     pool.close()
 
     return counts, count_total
+
 
 def compareToDatabase(dbase, mols, sim_cutoff=0.8):
     count_total = 0
