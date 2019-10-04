@@ -30,9 +30,9 @@ def main(dbase, i):
     cutoff = 0.99
     print("Getting internal consistency. Cutoff:", cutoff)
     #num_repeats_inside_dbase = calc.pGetInternalSimilarity(dbase_fp, sim_cutoff=cutoff)
-    num_repeats_inside_input = calc.pGetInternalSimilarity(input_mols, sim_cutoff=cutoff)
+    #num_repeats_inside_input = calc.pGetInternalSimilarity(input_mols, sim_cutoff=cutoff)
     #print("num_repeats_inside_dbase", num_repeats_inside_dbase)
-    print("num_repeats_inside_input", num_repeats_inside_input)
+    #print("num_repeats_inside_input", num_repeats_inside_input)
 
     cutoff = 0.98
     print("Cutoff:", cutoff)
