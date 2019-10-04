@@ -37,9 +37,10 @@ def main(dbase, i):
     print("Total mols with >=1", counts)
     print("\n\n---------\n\n")
     print("Total Sampled: ", input_total_mols)
-    print("Valid Sampled: ", input_valid_mols, float(input_total_mols) / input_valid_mols)
-    print("Valid Unqiue (In Sample)", input_valid_mols - num_repeats_inside_input, float(input_valid_mols - num_repeats_inside_input) / input_valid_mols)
-    print("Valid Unique (W/ Trn", input_valid_mols - counts, float(num_repeats_inside_input - counts) / input_total_mols)
+    print("Valid Sampled: ", input_valid_mols, float(input_valid_mols) / input_total_mols)
+    print("Valid Unqiue (In Sample)", input_valid_mols - num_repeats_inside_input,
+                                       float(input_valid_mols - num_repeats_inside_input) / input_total_mols)
+    print("Valid Unique (W/ Trn", input_valid_mols - counts, float(input_valid_mols - counts) / input_total_mols)
 
 # def main(dbase, i):
 #     # get valid numbers
