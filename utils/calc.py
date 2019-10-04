@@ -3,7 +3,7 @@ import multiprocessing
 from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem import AllChem
-
+import numpy as np
 from tqdm import tqdm
 
 def noneCheckedSmileToMol(smi):
@@ -57,12 +57,27 @@ def pGetSmiles(mollist, threads=1):
     pool.close()
     return res
 
-def dbaseEquality(dbase, mols):
+def check_in(ins):
     count = 0
-    for mol in tqdm(mols):
+    mols, dbase = ins
+    for mol in mols:
         if mol in dbase:
             count += 1
+
     return count
+
+def dbaseEquality(dbase, mols, threads=16):
+    count = 0
+    mols = np.array_split(np.array(mols), threads)
+    inputs = map(lambda x : (list(mols[x]),dbase), range(threads))
+    pool = multiprocessing.Pool(threads)
+    res = pool.map(check_in, inputs)
+    pool.close()
+
+    sum = 0
+    for i in res:
+        sum += i
+    return sum
 
 def dbaseEqualInternal(dbase):
     return len(dbase) - len(set(dbase))
