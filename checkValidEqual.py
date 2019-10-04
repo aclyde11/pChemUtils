@@ -19,8 +19,8 @@ def main(dbase, i):
 
     # get fingprints for everything
     print("Getting fingerprints")
-    dbase_fp = calc.pGetSmiles(dbase_mols, threads=4)
-    input_mols = calc.pGetSmiles(input_mols, threads=4)
+    dbase_fp = calc.pGetSmiles(dbase_mols, threads=32)
+    input_mols = calc.pGetSmiles(input_mols, threads=32)
 
     # get internal consistency
     print("Getting internal consistency.")
