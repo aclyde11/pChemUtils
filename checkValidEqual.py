@@ -34,8 +34,8 @@ def main(dbase, i):
     print("Total mols with overlap", counts)
 
     print("Computing Scaffold Sim")
-    dbase_scaffs = getScaffsFromSmiles()
-    input_scaffs = getScaffsFromSmiles()
+    dbase_scaffs = calc.pgetScaffsFromSmiles(dbase_fp, threads=16)
+    input_scaffs = calc.pgetScaffsFromSmiles(input_mols, threads=16)
 
     dbase_scaffs, _ = calc.dbaseEqualInternal(dbase_scaffs)
     input_scaffs, num_repeated_scaffs = calc.dbaseEqualInternal(input_scaffs)
