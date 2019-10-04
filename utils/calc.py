@@ -32,6 +32,7 @@ def pSmilesToValidMolsFromFile(fname, threads=1, return_counts=True):
     iters = pool.imap(noneCheckedSmileToMol, smiles, chunksize=1000)
     iters = list(filter(lambda x: x is not None, iters))
     newlen = len(iters)
+    pool.close()
 
     if return_counts:
         return iters, original_length, newlen
@@ -43,7 +44,28 @@ def getMorganfingerprint(m):
 def pGetFingerprints(mollist, threads=1):
     pool = multiprocessing.Pool(threads)
     res = pool.map(getMorganfingerprint, mollist)
+    pool.close()
     return res
+
+def getSmiles(m):
+    return Chem.MolToSmiles(m)
+
+def pGetSmiles(mollist, threads=1):
+    pool = multiprocessing.Pool(threads)
+    res = pool.map(getSmiles, mollist)
+
+    pool.close()
+    return res
+
+def dbaseEquality(dbase, mols):
+    count = 0
+    for mol in tqdm(mols):
+        if mol in dbase:
+            count += 1
+    return count
+
+def dbaseEqualInternal(dbase):
+    return len(dbase) - len(set(dbase))
 
 def pGetInternalSimilarity(fps, sim_cutoff=0.8):
     # the list for the dataframe
@@ -80,6 +102,7 @@ def pCompareToDatabase(dbase, mols, sim_cutoff=0.8, threads=1):
         counts.append(count)
         if count >= 2:
             count_total += 1
+    pool.close()
 
     return counts, count_total
 
