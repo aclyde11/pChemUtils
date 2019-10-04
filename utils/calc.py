@@ -78,16 +78,21 @@ def check_in(ins):
 
 def dbaseEquality(dbase, mols, threads=16):
     count = 0
-    mols = np.array_split(np.array(mols), threads)
-    inputs = map(lambda x: (list(mols[x]), dbase), range(threads))
-    pool = multiprocessing.Pool(threads)
-    res = pool.map(check_in, inputs)
-    pool.close()
+    count = len(set(dbase).intersection(set(mols)))
+    return count
 
-    sum = 0
-    for i in res:
-        sum += i
-    return sum
+    # mols =
+    #
+    # mols = np.array_split(np.array(mols), threads)
+    # inputs = map(lambda x: (list(mols[x]), dbase), range(threads))
+    # pool = multiprocessing.Pool(threads)
+    # res = pool.map(check_in, inputs)
+    # pool.close()
+    #
+    # sum = 0
+    # for i in res:
+    #     sum += i
+    # return sum
 
 
 def dbaseEqualInternal(dbase):
