@@ -28,7 +28,7 @@ def pSmilesToValidMolsFromFile(fname, threads=1, return_counts=True):
 
     smiles = FromTxtFileToSmilesList(fname)
     original_length = len(smiles)
-    iters = pool.map(smiles, chunksize=1000)
+    iters = pool.imap(noneCheckedSmileToMol, smiles, chunksize=1000)
     iters = list(filter(lambda x: x is not None, iters))
     newlen = len(iters)
 
