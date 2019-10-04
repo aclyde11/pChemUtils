@@ -39,8 +39,8 @@ def main(dbase, i):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-dbase', required=True, type=is_valid_file_str, help='database list of smiles only')
-    parser.add_argument('-i', required=True, type=is_valid_file_str, help='new list of smiles only')
+    parser.add_argument('-dbase', required=True, type=str, help='database list of smiles only')
+    parser.add_argument('-i', required=True, type=str, help='new list of smiles only')
     args = parser.parse_args()
 
     main(args.dbase, args.i)

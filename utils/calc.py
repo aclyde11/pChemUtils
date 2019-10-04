@@ -28,13 +28,13 @@ def pSmilesToValidMolsFromFile(fname, threads=1, return_counts=True):
 
     smiles = FromTxtFileToSmilesList(fname)
     original_length = len(smiles)
-    iter = pool.imap(smiles, chunksize=1000)
-    iter = list(filter(lambda x: x is not None, iter))
-    newlen = len(iter)
+    iters = pool.map(smiles, chunksize=1000)
+    iters = list(filter(lambda x: x is not None, iters))
+    newlen = len(iters)
 
     if return_counts:
-        return iter, original_length, newlen
-    return iter
+        return iters, original_length, newlen
+    return iters
 
 
 def pGetFingerprints(mollist, threads=1):
