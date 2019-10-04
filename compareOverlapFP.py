@@ -37,7 +37,7 @@ def main(dbase, i):
     cutoff = 0.98
     print("Cutoff:", cutoff)
     print("Getting sim between input and database")
-    counts, count_total = calc.compareToDatabase(dbase_fp, input_mols, sim_cutoff=cutoff)
+    counts, count_total = calc.pCompareToDatabase(dbase_fp, input_mols, sim_cutoff=cutoff, threads=8)
     print("Total mols with >=1", count_total)
 
 if __name__ == '__main__':
