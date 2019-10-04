@@ -10,9 +10,9 @@ from utils.files import is_valid_file_str
 
 def main(dbase, i):
     # get valid numbers
-    dbase_mols, dbase_total_mols, dbase_valid_mols = calc.pSmilesToValidMolsFromFile(dbase, threads=8,
+    dbase_mols, dbase_total_mols, dbase_valid_mols = calc.pSmilesToValidMolsFromFile(dbase, threads=16,
                                                                                      return_counts=True)
-    input_mols, input_total_mols, input_valid_mols = calc.pSmilesToValidMolsFromFile(i, threads=4, return_counts=True)
+    input_mols, input_total_mols, input_valid_mols = calc.pSmilesToValidMolsFromFile(i, threads=16, return_counts=True)
 
     print("dbase has", dbase_total_mols, "mols. Valid mols:", dbase_valid_mols)
     print("input has", input_total_mols, "mols. Valid mols:", input_valid_mols)
@@ -33,7 +33,7 @@ def main(dbase, i):
     cutoff = 0.98
     print("Cutoff:", cutoff)
     print("Getting sim between input and database")
-    counts = calc.dbaseEquality(dbase_fp, input_mols)
+    counts = calc.dbaseEquality(dbase_fp, input_mols, threads=32)
     print("Total mols with >=1", counts)
     print("\n\n---------\n\n")
     print("Total Sampled: ", input_total_mols)
