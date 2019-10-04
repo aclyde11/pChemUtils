@@ -71,7 +71,8 @@ def _pCompareDatabase(dbase, sim_cutoff=0.8):
 
 def pCompareToDatabase(dbase, mols, sim_cutoff=0.8, threads=1):
     pool = multiprocessing.Pool(threads)
-    iters = pool.imap(_pCompareDatabase(dbase, sim_cutoff), mols, chunksize=20)
+    f =_pCompareDatabase(dbase, sim_cutoff)
+    iters = pool.imap(f, mols, chunksize=20)
 
     counts = []
     count_total =0
