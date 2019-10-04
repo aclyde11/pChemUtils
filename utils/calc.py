@@ -36,11 +36,12 @@ def pSmilesToValidMolsFromFile(fname, threads=1, return_counts=True):
         return iters, original_length, newlen
     return iters
 
+def getMorganfingerprint(m):
+    return AllChem.GetMorganFingerprint(m, 2)
 
 def pGetFingerprints(mollist, threads=1):
-    func = lambda m: AllChem.GetMorganFingerprint(m, 2)
     pool = multiprocessing.Pool(threads)
-    res = pool.map(func, mollist)
+    res = pool.map(getMorganfingerprint, mollist)
     return res
 
 
