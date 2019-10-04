@@ -44,7 +44,6 @@ def pGetFingerprints(mollist, threads=1):
     res = pool.map(getMorganfingerprint, mollist)
     return res
 
-
 def pGetInternalSimilarity(fps, sim_cutoff=0.8):
     # the list for the dataframe
     count = 0
@@ -53,6 +52,7 @@ def pGetInternalSimilarity(fps, sim_cutoff=0.8):
         s = DataStructs.BulkTanimotoSimilarity(fps[n], fps[n + 1:])  # +1 compare with the next to the last fp
         # collect the SMILES and values
         for m in range(len(s)):
+            print(s[m])
             if s[m] >= sim_cutoff:
                 count += 1
     return count
